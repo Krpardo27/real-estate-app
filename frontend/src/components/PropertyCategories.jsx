@@ -20,7 +20,20 @@ const categories = [
 const PropertyCategories = () => {
   return (
     <section className="py-12">
-      <h2 className="text-2xl font-bold mb-8">Explorar propiedades</h2>
+      <div className="mb-10">
+        <div className="flex items-center gap-3 mb-2">
+          <span className="h-6 w-[3px] bg-indigo-600 rounded-full"></span>
+
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">
+            Explorar propiedades
+          </h2>
+        </div>
+
+        <p className="text-gray-500 text-sm">
+          Encuentra casas, departamentos y oportunidades inmobiliarias en
+          distintas zonas.
+        </p>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {categories.map((cat) => (

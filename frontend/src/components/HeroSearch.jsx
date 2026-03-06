@@ -2,7 +2,7 @@ import { FiSearch } from "react-icons/fi";
 
 const HeroSearch = () => {
   return (
-    <section className="relative h-[420px] flex items-center justify-center">
+    <div className="relative h-[620px] flex items-center justify-center">
       {/* background */}
       <div
         className="absolute inset-0 bg-cover bg-center"
@@ -45,7 +45,7 @@ const HeroSearch = () => {
           </button>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

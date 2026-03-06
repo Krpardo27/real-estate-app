@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://homeradar.cl/sitemap.xml

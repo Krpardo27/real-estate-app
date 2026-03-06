@@ -16,11 +16,11 @@ const Breadcrumbs = ({ items = [] }) => {
         const isLast = index === items.length - 1;
 
         return (
-          <div key={index} className="flex items-center gap-2">
+          <div key={index} className="flex items-center gap-2 text-[13px]">
             <FiChevronRight className="text-slate-400" />
 
             {isLast ? (
-              <span className="font-medium text-slate-800">{item.label}</span>
+              <span className="font-medium text-slate-800 ">{item.label}</span>
             ) : (
               <Link to={item.href} className="hover:text-blue-600 transition">
                 {item.label}

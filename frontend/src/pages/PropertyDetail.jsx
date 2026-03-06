@@ -8,10 +8,8 @@ import {
   IoCallOutline,
 } from "react-icons/io5";
 import { BiLoaderAlt } from "react-icons/bi";
-
 import { getPropertyById } from "../api/properties";
 import Breadcrumbs from "../components/Breadcrumbs";
-import { useEffect } from "react";
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -29,10 +27,6 @@ const PropertyDetail = () => {
     queryFn: () => getPropertyById(id),
     enabled: !!id,
   });
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [id]);
 
   if (isLoading) {
     return (
@@ -55,13 +49,11 @@ const PropertyDetail = () => {
   }
 
   const images = property.images || [];
-
   const city = cityFromState || property.city;
   const district = districtFromState || property.district;
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8 md:py-12">
-      {/* Breadcrumb */}
       <Breadcrumbs
         items={[
           { label: city, href: `/search?city=${city}` },

@@ -3,6 +3,7 @@ import { LuBedDouble, LuBath, LuRuler } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
 const PropertyCard = ({ property }) => {
+  
   return (
     <article className="group bg-white rounded-xl overflow-hidden border border-zinc-200 hover:shadow-lg transition">
       {/* image */}
