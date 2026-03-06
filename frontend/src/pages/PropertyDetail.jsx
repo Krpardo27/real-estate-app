@@ -11,6 +11,7 @@ import { BiLoaderAlt } from "react-icons/bi";
 
 import { getPropertyById } from "../api/properties";
 import Breadcrumbs from "../components/Breadcrumbs";
+import { useEffect } from "react";
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -28,6 +29,10 @@ const PropertyDetail = () => {
     queryFn: () => getPropertyById(id),
     enabled: !!id,
   });
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id]);
 
   if (isLoading) {
     return (

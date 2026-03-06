@@ -12,7 +12,8 @@ const PropertyCard = ({ property }) => {
           state={{
             city: property.city,
             district: property.district,
-            from: "search", 
+            from: "search",
+            scrollY: window.scrollY,
           }}
         >
           <img

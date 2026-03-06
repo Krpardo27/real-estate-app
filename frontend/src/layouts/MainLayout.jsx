@@ -1,19 +1,19 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/Header";
 import NavMobile from "../components/NavMobile";
+import Footer from "../components/Footer";
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen flex flex-col mx-auto max-w-360">
+    <div className="min-h-screen flex flex-col mx-auto">
       <Header />
       <NavMobile />
-      <main className="flex-1 container mx-auto lg:p-6 p-1">
+
+      <main className="flex-1 lg:p-6 p-1 max-w-360 mx-auto">
         <Outlet />
       </main>
 
-      <footer className="border-t p-4 text-center text-sm">
-        © 2026 HomeFinder
-      </footer>
+      <Footer />
     </div>
   );
 };
