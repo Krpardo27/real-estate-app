@@ -15,6 +15,7 @@ const SearchResults = () => {
   return (
     <main className="max-w-7xl mx-auto px-4 py-12">
       <Breadcrumbs items={[{ label: city }]} />
+
       <h1 className="text-3xl font-bold mb-8">Propiedades en {city}</h1>
 
       {filtered.length === 0 && (

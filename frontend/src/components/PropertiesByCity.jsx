@@ -4,7 +4,19 @@ import { cities } from "../data/cities";
 const PropertiesByCity = () => {
   return (
     <section className="mx-auto py-12">
-      <h2 className="text-2xl font-bold mb-8">Explorar por ciudad</h2>
+      <div className="mb-10">
+        <div className="flex items-center gap-3 mb-2">
+          <span className="h-6 w-[3px] bg-indigo-600 rounded-full"></span>
+
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900">
+            Explorar por ciudad
+          </h2>
+        </div>
+
+        <p className="text-gray-500 text-sm">
+          Descubre propiedades disponibles en las principales ciudades de Chile.
+        </p>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {cities.map((city) => (
