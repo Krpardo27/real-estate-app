@@ -19,7 +19,7 @@ const categories = [
 
 const PropertyCategories = () => {
   return (
-    <section className="px-4 sm:px-6 py-12">
+    <section className="py-12">
       <h2 className="text-2xl font-bold mb-8">Explorar propiedades</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

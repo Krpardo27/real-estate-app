@@ -3,7 +3,7 @@ import PropertyCard from "./PropertyCard.jsx";
 
 const PropertyGrid = () => {
   return (
-    <section className="px-4 sm:px-6 py-10">
+    <section className="py-10">
       <h2 className="text-2xl font-bold mb-6">Propiedades destacadas</h2>
 
       <div
