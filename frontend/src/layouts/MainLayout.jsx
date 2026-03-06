@@ -7,7 +7,7 @@ const MainLayout = () => {
     <div className="min-h-screen flex flex-col mx-auto max-w-360">
       <Header />
       <NavMobile />
-      <main className="flex-1 container mx-auto p-6 ">
+      <main className="flex-1 container mx-auto lg:p-6 p-1">
         <Outlet />
       </main>
 

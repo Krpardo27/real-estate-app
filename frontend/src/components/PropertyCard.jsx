@@ -1,16 +1,26 @@
 import { FiHeart } from "react-icons/fi";
 import { LuBedDouble, LuBath, LuRuler } from "react-icons/lu";
+import { Link } from "react-router-dom";
 
 const PropertyCard = ({ property }) => {
   return (
     <article className="group bg-white rounded-xl overflow-hidden border border-zinc-200 hover:shadow-lg transition">
       {/* image */}
       <div className="relative aspect-4-3 overflow-hidden">
-        <img
-          src={property.image}
-          alt={property.title}
-          className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
-        />
+        <Link
+          to={`/property/${property.id}`}
+          state={{
+            city: property.city,
+            district: property.district,
+            from: "search", 
+          }}
+        >
+          <img
+            src={property.images?.[0]}
+            alt={property.title}
+            className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+          />
+        </Link>
 
         {/* favorite */}
         <button className="absolute top-3 right-3 bg-white/90 backdrop-blur p-2 rounded-full hover:bg-white transition">
@@ -21,7 +31,7 @@ const PropertyCard = ({ property }) => {
       {/* content */}
       <div className="p-4 space-y-2">
         <h3 className="text-lg font-semibold text-zinc-900">
-          ${property.price}
+          ${property?.price?.toLocaleString() ?? "0"}
         </h3>
 
         <p className="text-sm text-zinc-600 line-clamp-1">{property.title}</p>

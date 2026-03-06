@@ -1,9 +1,10 @@
 import { createBrowserRouter } from "react-router-dom";
 
-// import PropertyDetail from "../pages/PropertyDetail";
 // import NotFound from "../pages/NotFound";
 import MainLayout from "./layouts/MainLayout";
 import Home from "./pages/Home";
+import PropertyDetail from "./pages/PropertyDetail";
+import SearchResults from "./pages/SearchResults";
 
 const router = createBrowserRouter([
   {
@@ -15,15 +16,22 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        // path: "/property/:id",
-        // element: <PropertyDetail />,
+        path: "property/:id",
+        element: <PropertyDetail />,
+        handle: {
+          breadcrumb: (match) =>
+            match.data?.title || `Propiedad ${match.params.id}`,
+        },
+      },
+      {
+        path: "/search",
+        element: <SearchResults />,
+        handle: {
+          breadcrumb: () => "Resultados",
+        },
       },
     ],
   },
-  // {
-  //   path: "*",
-  //   element: <NotFound />,
-  // },
 ]);
 
 export default router;
