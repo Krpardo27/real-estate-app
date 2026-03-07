@@ -1,16 +1,21 @@
 import { FiSearch } from "react-icons/fi";
+import { cld } from "../utils/cloudinary.js";
 
 const HeroSearch = () => {
   return (
     <div className="relative h-[620px] flex items-center justify-center">
-      {/* background */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://images.unsplash.com/photo-1560518883-ce09059eeffa')",
-        }}
-      />
+      <img
+  src={cld(
+    "real-estate/hero-house/photo-1560518883-ce09059eeffa_b4up0m",
+    1600
+  )}
+  alt="Casas en venta"
+  fetchpriority="high"
+  loading="eager"
+  width="1600"
+  height="800"
+  className="absolute inset-0 w-full h-full object-cover"
+/>
 
       <div className="absolute inset-0 bg-black/40"></div>
 

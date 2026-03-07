@@ -10,6 +10,7 @@ import {
 import { BiLoaderAlt } from "react-icons/bi";
 import { getPropertyById } from "../api/properties";
 import Breadcrumbs from "../components/Breadcrumbs";
+import { cld } from "../utils/cloudinary";
 
 const PropertyDetail = () => {
   const { id } = useParams();
@@ -102,7 +103,7 @@ const PropertyDetail = () => {
       <div className="hidden md:grid grid-cols-4 gap-4 mb-10 h-[550px]">
         <div className="col-span-2 overflow-hidden rounded-2xl shadow-lg">
           <img
-            src={images[0]}
+            src={cld(images[0], 1600)}
             alt={property.title}
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
           />

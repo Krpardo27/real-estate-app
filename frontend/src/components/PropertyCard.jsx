@@ -1,12 +1,11 @@
 import { FiHeart } from "react-icons/fi";
 import { LuBedDouble, LuBath, LuRuler } from "react-icons/lu";
 import { Link } from "react-router-dom";
+import { cld } from "../utils/cloudinary.js";
 
 const PropertyCard = ({ property }) => {
-  
   return (
     <article className="group bg-white rounded-xl overflow-hidden border border-zinc-200 hover:shadow-lg transition">
-      {/* image */}
       <div className="relative aspect-4-3 overflow-hidden">
         <Link
           to={`/property/${property.id}`}
@@ -18,9 +17,16 @@ const PropertyCard = ({ property }) => {
           }}
         >
           <img
-            src={property.images?.[0]}
+            src={cld(property.images[0], 800)}
+            srcSet={`
+    ${cld(property.images[0], 400)} 400w,
+    ${cld(property.images[0], 800)} 800w,
+    ${cld(property.images[0], 1200)} 1200w
+  `}
+            sizes="(max-width:768px) 100vw, 400px"
             alt={property.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+            loading="lazy"
+            className="w-full h-full object-cover"
           />
         </Link>
 
