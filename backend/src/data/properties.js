@@ -1,0 +1,114 @@
+// export const properties = [
+//   {
+//     "id": 1,
+//     "title": "Departamento en Ñuñoa",
+//     "city": "Santiago",
+//     "district": "Ñuñoa",
+//     "location": "Ñuñoa, Santiago",
+//     "price": 120000000,
+//     "bedrooms": 2,
+//     "bathrooms": 2,
+//     "area": 65,
+//     "description": "Departamento moderno cercano al metro.",
+//     "images": [
+//       "real-estate/properties/1/image-0.jpg",
+//       "real-estate/properties/1/image-1.jpg"
+//     ]
+//   },
+//   {
+//     "id": 2,
+//     "title": "Penthouse con terraza en Vitacura",
+//     "city": "Santiago",
+//     "district": "Vitacura",
+//     "location": "Vitacura, Santiago",
+//     "price": 580000000,
+//     "bedrooms": 4,
+//     "bathrooms": 4,
+//     "area": 220,
+//     "description": "Amplio penthouse con terraza panorámica cercano a parques.",
+//     "images": [
+//       "real-estate/properties/2/image-0",
+//       "real-estate/properties/2/image-1"
+//     ]
+//   },
+//   {
+//     "id": 3,
+//     "title": "Casa con vista al mar",
+//     "city": "Valparaíso",
+//     "district": "Cerro Alegre",
+//     "location": "Cerro Alegre, Valparaíso",
+//     "price": 260000000,
+//     "bedrooms": 3,
+//     "bathrooms": 2,
+//     "area": 140,
+//     "description": "Hermosa casa con vista al océano Pacífico y arquitectura patrimonial.",
+//     "images": [
+//       "real-estate/properties/3/image-0",
+//       "real-estate/properties/3/image-1"
+//     ]
+//   },
+//   {
+//     "id": 4,
+//     "title": "Departamento turístico en Valparaíso",
+//     "city": "Valparaíso",
+//     "district": "Cerro Concepción",
+//     "location": "Cerro Concepción, Valparaíso",
+//     "price": 180000000,
+//     "bedrooms": 2,
+//     "bathrooms": 1,
+//     "area": 70,
+//     "description": "Departamento ideal para arriendo turístico cerca de ascensores históricos.",
+//     "images": [
+//       "real-estate/properties/4/image-0",
+//       "real-estate/properties/4/image-1"
+//     ]
+//   },
+//   {
+//     "id": 5,
+//     "title": "Casa moderna en Concepción",
+//     "city": "Concepción",
+//     "district": "San Pedro de la Paz",
+//     "location": "San Pedro de la Paz, Concepción",
+//     "price": 240000000,
+//     "bedrooms": 3,
+//     "bathrooms": 2,
+//     "area": 150,
+//     "description": "Casa moderna con patio amplio y excelente conectividad.",
+//     "images": [
+//       "real-estate/properties/5/image-0",
+//       "real-estate/properties/5/image-1"
+//     ]
+//   },
+//   {
+//     "id": 6,
+//     "title": "Departamento frente al río Biobío",
+//     "city": "Concepción",
+//     "district": "Centro",
+//     "location": "Centro de Concepción",
+//     "price": 160000000,
+//     "bedrooms": 2,
+//     "bathrooms": 2,
+//     "area": 85,
+//     "description": "Departamento con vista al río Biobío y cercanía a universidades.",
+//     "images": [
+//       "real-estate/properties/6/image-0",
+//       "real-estate/properties/6/image-1"
+//     ]
+//   },
+//   {
+//     "id": 7,
+//     "title": "Casa en barrio residencial",
+//     "city": "La Serena",
+//     "district": "La Florida",
+//     "location": "La Florida, La Serena",
+//     "price": 190000000,
+//     "bedrooms": 3,
+//     "bathrooms": 2,
+//     "area": 120,
+//     "description": "Casa familiar en barrio tranquilo cercano a colegios.",
+//     "images": [
+//       "real-estate/properties/7/image-0",
+//       "real-estate/properties/7/image-1"
+//     ]
+//   }
+// ]
