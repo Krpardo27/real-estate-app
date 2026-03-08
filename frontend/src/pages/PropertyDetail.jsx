@@ -66,9 +66,9 @@ const PropertyDetail = () => {
         ]}
       />
       {/* Header */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-6 gap-4">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-end mb-6 gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900">
+          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
             {property.title}
           </h1>
 
@@ -89,7 +89,7 @@ const PropertyDetail = () => {
         </div>
       </div>
       {/* MOBILE gallery */}
-      <div className="md:hidden flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4">
+      <div className="lg:hidden flex justify-center gap-4 w-full overflow-x-auto snap-x snap-mandatory pb-4">
         {images.map((img, i) => (
           <img
             key={i}
@@ -100,7 +100,7 @@ const PropertyDetail = () => {
         ))}
       </div>
       {/* DESKTOP gallery */}
-      <div className="hidden md:grid grid-cols-4 gap-4 mb-10 h-[550px]">
+      <div className="hidden lg:grid grid-cols-4 gap-4 mb-10 h-[550px]">
         <div className="col-span-2 overflow-hidden rounded-2xl shadow-lg">
           <img
             src={cld(images[0], 1600)}

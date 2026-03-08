@@ -3,7 +3,7 @@ import { cities } from "../data/cities";
 
 const PropertiesByCity = () => {
   return (
-    <section className="mx-auto py-12">
+    <section>
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
           <span className="h-6 w-[3px] bg-indigo-600 rounded-full"></span>

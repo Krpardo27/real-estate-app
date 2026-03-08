@@ -2,8 +2,10 @@ import { properties } from "../data/properties.js";
 import PropertyCard from "./PropertyCard.jsx";
 
 const PropertyGrid = () => {
+  const featured = [...properties].slice(0, 12);
+
   return (
-    <section className="py-10">
+    <section>
       <div className="mb-10">
         <div className="flex items-center gap-3 mb-2">
           <span className="h-6 w-[3px] bg-indigo-600 rounded-full"></span>
@@ -16,6 +18,7 @@ const PropertyGrid = () => {
           Descubre las mejores oportunidades inmobiliarias disponibles hoy.
         </p>
       </div>
+
       <div
         className="
         grid
@@ -23,7 +26,7 @@ const PropertyGrid = () => {
         grid-cols-[repeat(auto-fit,minmax(260px,1fr))]
         "
       >
-        {properties.map((property) => (
+        {featured.map((property) => (
           <PropertyCard key={property.id} property={property} />
         ))}
       </div>

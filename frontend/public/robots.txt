@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://homeradar.cl/sitemap.xml
+Sitemap: https://Home Estate.cl/sitemap.xml

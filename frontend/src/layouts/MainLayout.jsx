@@ -9,7 +9,6 @@ const MainLayout = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <ScrollToTop />
-
       <Header />
       <NavMobile />
 
