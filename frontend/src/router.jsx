@@ -1,10 +1,13 @@
 import { createBrowserRouter } from "react-router-dom";
+import { lazy, Suspense } from "react";
 
-// import NotFound from "../pages/NotFound";
 import MainLayout from "./layouts/MainLayout";
-import Home from "./pages/Home";
-import PropertyDetail from "./pages/PropertyDetail";
-import SearchResults from "./pages/SearchResults";
+
+const Home = lazy(() => import("./pages/Home"));
+const SearchResults = lazy(() => import("./pages/SearchResults"));
+const PropertyDetail = lazy(() => import("./pages/PropertyDetail"));
+
+const loader = <div className="p-10 text-center">Cargando...</div>;
 
 const router = createBrowserRouter([
   {
@@ -13,19 +16,31 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: (
+          <Suspense fallback={loader}>
+            <Home />
+          </Suspense>
+        ),
       },
       {
         path: "property/:id",
-        element: <PropertyDetail />,
+        element: (
+          <Suspense fallback={loader}>
+            <PropertyDetail />
+          </Suspense>
+        ),
         handle: {
           breadcrumb: (match) =>
             match.data?.title || `Propiedad ${match.params.id}`,
         },
       },
       {
-        path: "/search",
-        element: <SearchResults />,
+        path: "search",
+        element: (
+          <Suspense fallback={loader}>
+            <SearchResults />
+          </Suspense>
+        ),
         handle: {
           breadcrumb: () => "Resultados",
         },
