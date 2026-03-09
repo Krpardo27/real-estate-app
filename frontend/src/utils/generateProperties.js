@@ -87,6 +87,14 @@ export const generateProperties = (count = 120) => {
 
     const coords = districtCoordinates[city]?.[district] || [-33.45, -70.66];
 
+    const cityRegionMap = {
+      Santiago: 13,
+      Valparaíso: 5,
+      Concepción: 8,
+      "La Serena": 4,
+      Talca: 7,
+    };
+
     generated.push({
       id: i + 1,
       type,
@@ -104,16 +112,7 @@ export const generateProperties = (count = 120) => {
       district,
       location: `${district}, ${city}`,
 
-      region:
-        city === "Santiago"
-          ? "metropolitana"
-          : city === "Valparaíso"
-            ? "valparaiso"
-            : city === "Concepción"
-              ? "biobio"
-              : city === "La Serena"
-                ? "coquimbo"
-                : "maule",
+      region: cityRegionMap[city],
 
       price: Math.floor(Math.random() * 450000000) + 70000000,
 

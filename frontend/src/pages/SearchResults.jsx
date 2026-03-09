@@ -31,27 +31,20 @@ const SearchResults = () => {
   };
 
   // params
-  const regionId = searchParams.get("region");
+  const regionId = Number(searchParams.get("region"));
+  const price = Number(searchParams.get("price"));
+  const bedrooms = Number(searchParams.get("bedrooms"));
+  const bathrooms = Number(searchParams.get("bathrooms"));
+  const area = Number(searchParams.get("area"));
+
   const district = searchParams.get("district");
   const city = searchParams.get("city");
-  const price = searchParams.get("price");
-  const bedrooms = searchParams.get("bedrooms");
-  const bathrooms = searchParams.get("bathrooms");
-  const area = searchParams.get("area");
   const type = searchParams.get("type");
-
-  const regionMap = {
-    13: "metropolitana",
-    5: "valparaiso",
-    8: "biobio",
-    4: "coquimbo",
-    7: "maule",
-  };
 
   const filtered = properties.filter((p) => {
     if (type && normalizeText(p.type) !== normalizeText(type)) return false;
 
-    if (regionId && p.region !== regionMap[regionId]) return false;
+    if (regionId && p.region !== Number(regionId)) return false;
 
     if (city && normalizeText(p.city) !== normalizeText(city)) return false;
 

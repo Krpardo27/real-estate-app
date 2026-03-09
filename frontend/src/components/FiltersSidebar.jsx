@@ -170,7 +170,7 @@ const FiltersSidebar = ({ className = "" }) => {
           value={cityOptions.find(
             (opt) => opt.value === searchParams.get("city"),
           )}
-          className="text-sm"
+          className="text-sm text-slate-400"
           styles={{
             control: (base) => ({
               ...base,
