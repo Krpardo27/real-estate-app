@@ -12,7 +12,7 @@ const MainLayout = () => {
       <Header />
       <NavMobile />
 
-      <main className="flex-1">
+      <main className="min-h-screen pb-16">
         <Outlet />
       </main>
 
