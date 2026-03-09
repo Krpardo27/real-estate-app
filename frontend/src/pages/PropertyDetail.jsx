@@ -29,6 +29,7 @@ const PropertyDetail = () => {
     enabled: !!id,
   });
 
+
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -52,6 +53,8 @@ const PropertyDetail = () => {
   const images = property.images || [];
   const city = cityFromState || property.city;
   const district = districtFromState || property.district;
+
+  console.log(property.images)
 
   return (
     <main className="max-w-7xl mx-auto px-4 py-8 md:py-12">
@@ -89,41 +92,51 @@ const PropertyDetail = () => {
         </div>
       </div>
       {/* MOBILE gallery */}
+      {/* MOBILE gallery */}
       <div className="lg:hidden flex justify-center gap-4 w-full overflow-x-auto snap-x snap-mandatory pb-4">
         {images.map((img, i) => (
           <img
             key={i}
-            src={img}
+            src={cld(img, 900)}
             alt={`${property.title} ${i + 1}`}
             className="snap-center w-[85%] h-80 shrink-0 object-cover rounded-xl"
           />
         ))}
       </div>
+
       {/* DESKTOP gallery */}
       <div className="hidden lg:grid grid-cols-4 gap-4 mb-10 h-[550px]">
+        {/* MAIN image */}
         <div className="col-span-2 overflow-hidden rounded-2xl shadow-lg">
           <img
             src={cld(images[0], 1600)}
-            alt={property.title}
+            alt={`${property.title} 1`}
+            fetchpriority="high"
+            loading="eager"
             className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
           />
         </div>
 
+        {/* middle column */}
         <div className="grid grid-rows-2 gap-4">
           <img
-            src={images[1] || images[0]}
+            src={cld(images[1] || images[0], 800)}
+            alt={`${property.title} 2`}
             className="w-full h-full object-cover rounded-2xl shadow-sm"
           />
 
           <img
-            src={images[2] || images[0]}
+            src={cld(images[2] || images[0], 800)}
+            alt={`${property.title} 3`}
             className="w-full h-full object-cover rounded-2xl shadow-sm"
           />
         </div>
 
+        {/* right image */}
         <div className="overflow-hidden rounded-2xl shadow-lg">
           <img
-            src={images[3] || images[0]}
+            src={cld(images[3] || images[0], 800)}
+            alt={`${property.title} 4`}
             className="w-full h-full object-cover"
           />
         </div>
