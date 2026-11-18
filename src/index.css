@@ -1,0 +1,130 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Montserrat Variable";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("@fontsource-variable/montserrat/files/montserrat-latin-wght-normal.woff2") format("woff2");
+}
+
+@theme {
+  --font-montserrat: "Montserrat Variable", "Montserrat", sans-serif;
+}
+
+@layer base {
+  :root {
+    --mobile-dock-height: 72px;
+    --mobile-dock-gap: 12px;
+    --mobile-dock-space: calc(var(--mobile-dock-height) + var(--mobile-dock-gap) + env(safe-area-inset-bottom, 0px) + 16px);
+    scroll-padding-bottom: var(--mobile-dock-space);
+  }
+
+  body {
+    @apply bg-gray-50 text-gray-800;
+    font-family: var(--font-montserrat);
+    margin: 0;
+    min-width: 320px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :focus-visible {
+    outline: 2px solid #4338ca;
+    outline-offset: 4px;
+  }
+
+  button, a, input, select { -webkit-tap-highlight-color: transparent; }
+  button, select { cursor: pointer; }
+  img { max-width: 100%; }
+  [id] { scroll-margin-top: 6rem; }
+
+  .filter-select {
+    @apply w-full border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500;
+  }
+}
+
+@layer components {
+  .site-layout { padding-bottom: var(--mobile-dock-space); }
+  .mobile-dock {
+    height: var(--mobile-dock-height);
+    bottom: calc(var(--mobile-dock-gap) + env(safe-area-inset-bottom, 0px));
+    box-shadow: 0 4px 24px rgb(15 23 42 / 12%);
+  }
+  .property-search-label { @apply mb-2 block text-sm font-semibold text-slate-800; }
+  .property-search-select {
+    @apply min-h-12 w-full min-w-0 rounded-md border border-slate-300 bg-white px-3 py-3 text-sm text-slate-800 transition-colors hover:border-slate-500 focus-visible:border-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-100 disabled:text-slate-500;
+  }
+  .property-search-select[aria-invalid="true"] { @apply border-red-600; }
+  .property-search-error { @apply mt-2 text-xs font-medium leading-5 text-red-700; }
+  .route-loading-block {
+    background-color: #e2e8f0;
+    animation: route-loading-pulse 1.8s ease-in-out infinite alternate;
+  }
+  .route-loading-progress > span { animation: route-loading-progress 1.4s ease-in-out infinite; }
+  .navigation-loading {
+    position: fixed;
+    inset: 80px 0 0;
+    z-index: 40;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-bottom: var(--mobile-dock-space);
+    background-color: #f9fafb;
+    opacity: 0;
+    visibility: hidden;
+    /* Sin temporizadores: una navegación rápida cancela la aparición por sí sola. */
+    animation: navigation-loading-enter 120ms ease-out 120ms forwards;
+  }
+  .navigation-loading + .route-outlet,
+  .site-layout:has(.navigation-loading) > footer {
+    /* Ocultar el contenido anterior solo cuando el skeleton ya puede aparecer.
+      Se conserva montado para no perder estado ni mapas. El footer tampoco
+      debe recibir foco detrás del panel de carga en transiciones lentas. */
+    animation: navigation-outlet-hide 0s linear 120ms forwards;
+  }
+  /* No hay claves nuevas ni remounts: los cambios de filtros conservan su DOM. */
+  .route-outlet > :first-child { animation: page-content-enter 160ms ease-out; }
+  .page-container { @apply mx-auto w-full max-w-7xl px-4 sm:px-6; }
+  .home-section { @apply mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:py-14; }
+  .button-primary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-indigo-700; }
+  .button-secondary { @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-800 transition-colors hover:bg-slate-100; }
+  .skip-link { @apply fixed left-4 top-3 z-10000 -translate-y-24 rounded-md bg-indigo-700 px-4 py-3 text-sm font-semibold text-white focus:translate-y-0; }
+}
+
+@keyframes route-loading-progress {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(400%); }
+}
+
+@keyframes route-loading-pulse {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+@keyframes navigation-loading-enter {
+  from { visibility: visible; opacity: 0; }
+  to { visibility: visible; opacity: 1; }
+}
+
+@keyframes navigation-outlet-hide {
+  to { visibility: hidden; }
+}
+
+@keyframes page-content-enter {
+  from { opacity: 0.92; }
+  to { opacity: 1; }
+}
+
+@media (min-width: 48rem) {
+  :root { scroll-padding-bottom: 0; }
+  .site-layout { padding-bottom: 0; }
+  .navigation-loading { padding-bottom: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
