@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { motion as Motion, useReducedMotion } from "framer-motion";
+import { m as Motion, useReducedMotion } from "framer-motion";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
@@ -11,9 +11,6 @@ import DistrictSelect from "./fields/DistrictSelect.jsx";
 import PropertyTypeSelect from "./fields/PropertyTypeSelect.jsx";
 import PriceSelect from "./fields/PriceSelect.jsx";
 
-/** @typedef {import("./schemas/propertySearch.schema.js").PropertySearchValues} PropertySearchValues */
-
-/** @type {import("react-hook-form").UseFormProps<PropertySearchValues>} */
 const formOptions = {
   resolver: zodResolver(propertySearchSchema),
   defaultValues: { region: "", district: "", type: "", price: "" },

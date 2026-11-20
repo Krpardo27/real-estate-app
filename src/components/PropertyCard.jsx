@@ -5,7 +5,7 @@ import PropertyImage from "./PropertyImage.jsx";
 import { useFavorites } from "../hooks/useFavorites.js";
 import { formatPrice } from "../utils/formatPrice.js";
 import { propertyTypes } from "../data/propertyTypes.js";
-import { motion as Motion } from "framer-motion";
+import { m as Motion } from "framer-motion";
 
 const PropertyCard = ({ property, variant = "default", onRemoveFavorite, imageMotion }) => {
   const editorial = variant === "editorial";

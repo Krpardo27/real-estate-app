@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import sharp from "sharp";
 
 test("producción: cabeceras, noindex y navegación accesible", async ({ page }) => {
   const response = await page.goto("/");
@@ -39,13 +40,29 @@ test("producción móvil: filtros compatibles, galería y guardados", async ({ p
 test("producción: mapa con worker CSP local y popup paginado", async ({ page }) => {
   // Se comprueba el motor/worker, no disponibilidad o calidad de cartografía externa.
   await page.route("https://tiles.openfreemap.org/**", (route) => route.fulfill({
-    contentType: "application/json", body: JSON.stringify({ version: 8, sources: {}, layers: [{ id: "background", type: "background", paint: { "background-color": "#e2e8f0" } }] }),
+    contentType: "application/json", body: JSON.stringify({ version: 8, sources: {
+      fixture: { type: "geojson", data: { type: "Feature", properties: {}, geometry: { type: "Polygon", coordinates: [[[-74, -38], [-69, -38], [-69, -28], [-74, -28], [-74, -38]]] } } },
+    }, layers: [
+      { id: "background", type: "background", paint: { "background-color": "#e2e8f0" } },
+      { id: "fixture-fill", type: "fill", source: "fixture", paint: { "fill-color": "#c62026" } },
+    ] }),
   }));
   const errors = [];
   page.on("pageerror", (error) => errors.push(error.message));
   await page.goto("/map?filters=all");
   const map = page.getByTestId("properties-map");
   await expect(map).toHaveAttribute("data-loaded", "true");
+  // La geometría debe procesarse en el worker y dibujarse realmente, no basta
+  // un canvas vacío o un onLoad exitoso tras cambiar la compilación del motor.
+  await expect.poll(async () => {
+    const image = await map.locator("canvas.maplibregl-canvas").screenshot();
+    const { data, info } = await sharp(image).raw().toBuffer({ resolveWithObject: true });
+    let redPixels = 0;
+    for (let i = 0; i < data.length; i += info.channels) {
+      if (data[i] > 150 && data[i + 1] < 90 && data[i + 2] < 110) redPixels++;
+    }
+    return redPixels;
+  }).toBeGreaterThan(1000);
   await map.locator(".property-map__marker--cluster").first().click();
   const popup = page.getByRole("dialog");
   await expect(popup).toBeVisible();
@@ -59,4 +76,16 @@ test("producción: mapa con worker CSP local y popup paginado", async ({ page })
   await page.keyboard.press("Escape");
   await expect(popup).toBeHidden();
   expect(errors).toEqual([]);
+});
+
+test("producción: mapa y galería no se descargan desde la portada; Motion tiene carga propia", async ({ page }) => {
+  const scripts = [];
+  page.on("request", (request) => {
+    if (request.resourceType() === "script") scripts.push(request.url());
+  });
+  await page.goto("/");
+  await expect(page.getByRole("heading", { name: "Explora propiedades en Chile", exact: true })).toBeVisible();
+  await expect.poll(() => scripts.some((url) => /\/motionFeatures-[^/]+\.js/.test(url))).toBe(true);
+  expect(scripts.filter((url) => /\/(?:map-|mapLibrary-|mapWorker-|PropertiesMap-|PropertyLightbox-)/.test(url))).toEqual([]);
+  expect(await page.locator('link[rel="modulepreload"][href*="map-"]').count()).toBe(0);
 });

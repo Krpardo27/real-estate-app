@@ -71,7 +71,7 @@ Las exclusiones añadidas no eliminan secretos del índice ni del historial. No 
 
 ### Rendimiento y compatibilidad
 
-- MapLibre sigue siendo un recurso diferido grande y Framer Motion añade JavaScript al bundle inicial. Vite mantiene advertencias de tamaño; no se ocultaron elevando umbrales.
-- Zod emite avisos de anotaciones internas PURE, sin impedir la compilación.
+- Optimización posterior de bundles: MapLibre y su worker se compilan por módulos desde la versión fijada 6.18.0; Motion usa m/LazyMotion y funciones cargadas dinámicamente. Ningún JavaScript emitido supera 500.000 bytes. No se elevó el umbral ni se suprimieron avisos. Medidas y límites de mantenimiento en [PRODUCTION_BUNDLES.md](PRODUCTION_BUNDLES.md).
+- Se corrigieron los comentarios documentales de Zod que Rollup interpretaba como anotaciones mal colocadas, sin eliminar anotaciones PURE reales ni cambiar la validación. El build final ya no emite esos avisos.
 - Lighthouse registró un aviso CSP en la inspección local HTTP. No se relajaron script-src ni worker-src para mejorar una puntuación; volver a comprobar cabeceras y consola bajo HTTPS real.
 - La auditoría automática no sustituye comprobaciones con lector de pantalla, teclado virtual, safe areas, zoom alto, dispositivos reales o redes lentas.

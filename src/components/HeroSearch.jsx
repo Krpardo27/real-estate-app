@@ -1,5 +1,5 @@
 import { useId } from "react";
-import { motion as Motion, useReducedMotion } from "framer-motion";
+import { m as Motion, useReducedMotion } from "framer-motion";
 import { FiArrowDown, FiMapPin } from "react-icons/fi";
 import PropertyImage from "./PropertyImage";
 import PropertySearchForm from "./property-search/PropertySearchForm.jsx";

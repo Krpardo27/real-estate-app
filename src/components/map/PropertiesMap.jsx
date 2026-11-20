@@ -1,8 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import Map, { Marker, Popup } from "react-map-gl/maplibre";
-import * as maplibregl from "maplibre-gl";
-import { setWorkerUrl } from "maplibre-gl";
-import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import { Link, useSearchParams } from "react-router-dom";
 import { FiArrowUpRight, FiMaximize, FiX } from "react-icons/fi";
 
@@ -18,7 +15,9 @@ import { buildMapLocations, getLocationCoordinateKey, getMapSelectionSignature }
 import { hasValidCoordinates } from "./coordinates.js";
 import "./map.css";
 
-setWorkerUrl(workerUrl);
+// La interfaz y el motor son fronteras independientes. React Map GL acepta
+// la promesa y comunica fallos mediante el onError existente.
+const mapLibrary = import("./mapLibrary.js").then(({ library }) => library);
 
 const formatPrice = (price) => Number.isFinite(price) && price >= 0
   ? `$${price.toLocaleString("es-CL")} CLP` : "Precio no disponible";
@@ -297,7 +296,7 @@ export default function PropertiesMap({ properties }) {
         {!unavailable && (
           <Map
             ref={mapRef}
-            mapLib={maplibregl}
+            mapLib={mapLibrary}
             initialViewState={INITIAL_VIEW_STATE}
             mapStyle={mapStyle}
             locale={MAP_LOCALE}

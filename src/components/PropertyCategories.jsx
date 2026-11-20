@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { FiArrowUpRight, FiHome, FiMap, FiBriefcase } from "react-icons/fi";
 import { FaRegBuilding } from "react-icons/fa";
 import { properties } from "../data/properties.js";
-import { motion as Motion } from "framer-motion";
+import { m as Motion } from "framer-motion";
 import { useEntranceMotion } from "../hooks/useEntranceMotion.js";
 
 const MotionLink = Motion.create(Link);

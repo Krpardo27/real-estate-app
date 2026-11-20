@@ -2,7 +2,7 @@ import { properties } from "../data/properties.js";
 import PropertyCard from "./PropertyCard.jsx";
 import { Link } from "react-router-dom";
 import { FiArrowUpRight } from "react-icons/fi";
-import { motion as Motion } from "framer-motion";
+import { m as Motion } from "framer-motion";
 import { useEntranceMotion } from "../hooks/useEntranceMotion.js";
 
 const PropertyGrid = () => {

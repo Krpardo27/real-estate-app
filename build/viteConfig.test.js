@@ -19,3 +19,14 @@ test("las dependencias diferidas del detalle y galería se preoptimizan", () => 
     "yet-another-react-lightbox/plugins/zoom",
   ]));
 });
+
+test("el build compila módulos reales del mapa y un worker ESM bajo el mismo presupuesto", () => {
+  const application = viteConfig({ mode: "test" });
+  expect(application.worker.format).toBe("es");
+  expect(application.build.manifest).toBe(true);
+  expect(application.build).not.toHaveProperty("chunkSizeWarningLimit");
+  expect(application.resolve.alias.find(({ find }) => find.test("maplibre-gl")).replacement).toMatch(/maplibre-gl[\\/]src[\\/]index\.ts$/);
+  expect(application.plugins.some(({ name }) => name === "javascript-chunk-budget")).toBe(true);
+  expect(application.worker.plugins().some(({ name }) => name === "javascript-chunk-budget")).toBe(true);
+  expect(application.optimizeDeps.exclude).toEqual(expect.arrayContaining(["maplibre-gl", "maplibre-worker-source"]));
+});
