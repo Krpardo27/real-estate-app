@@ -2,7 +2,7 @@ import { generateProperties } from "../utils/generateProperties.js";
 import { propertyImages } from "./siteImages.js";
 
 // Datos exclusivamente de demostración, reproducibles entre sesiones.
-export const properties = generateProperties(120).map((property) => ({ ...property, images: propertyImages(property) }));
+export const properties = generateProperties(600).map((property) => ({ ...property, images: propertyImages(property) }));
 
 export function getPropertyById(id) {
 	const value = String(id ?? "").trim();

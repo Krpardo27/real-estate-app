@@ -1,10 +1,7 @@
 import server from './server.js';
 
-const PORT = process.env.PORT || 5000;
-console.log(PORT);
+const PORT = Number(process.env.PORT || 5000);
+const HOST = process.env.HOST || "127.0.0.1";
+if (!Number.isSafeInteger(PORT) || PORT < 1 || PORT > 65535) throw new Error("Puerto inválido.");
 
-server.listen(PORT, () => {
-	console.log(`Servidor escuchando en http://localhost:${PORT}`);
-	console.log(`Frontend permitido: ${process.env.FRONTEND_URL}`);
-	console.log(`Cloudinary Cloud Name: ${process.env.CLOUDINARY_CLOUD_NAME}`);
-});
+server.listen(PORT, HOST, () => console.log(`Servidor escuchando en http://${HOST}:${PORT}`));

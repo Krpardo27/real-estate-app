@@ -9,7 +9,8 @@ test("semilla reproducible, IDs estables y prefijo conservado al ampliar catálo
   expect(generateProperties()).toStrictEqual(generateProperties());
   // Las fotos son editoriales y se pueden sustituir sin modificar identidad/precio.
   const withoutImages = (catalog) => catalog.map((property) => ({ ...property, images: [] }));
-  expect(withoutImages(properties)).toStrictEqual(withoutImages(generateProperties(120, DEMO_SEED)));
+  expect(withoutImages(properties)).toStrictEqual(withoutImages(generateProperties(600, DEMO_SEED)));
+  expect(withoutImages(properties.slice(0, 120))).toStrictEqual(withoutImages(generateProperties(120, DEMO_SEED)));
   expect(generateProperties(10)).toStrictEqual(generateProperties(20).slice(0, 10));
   expect(generateProperties(10, 1)).not.toStrictEqual(generateProperties(10, 2));
   expect(generateProperties(10).map((property) => property.id)).toStrictEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
@@ -17,6 +18,20 @@ test("semilla reproducible, IDs estables y prefijo conservado al ampliar catálo
   expect(generateProperties(0)).toStrictEqual([]);
   for (const count of [-1, 1.5, Infinity, "10", 100001]) expect(() => generateProperties(count)).toThrow(RangeError);
   expect(() => generateProperties(1, NaN)).toThrow(TypeError);
+});
+
+test("catálogo ampliado incluye casas, departamentos y terrenos con precios CLP variados", () => {
+  expect(properties).toHaveLength(600);
+  for (const type of ["house", "apartment", "land"]) {
+    const entries = properties.filter((property) => property.type === type);
+    expect(entries.length).toBeGreaterThan(100);
+    expect(new Set(entries.map((property) => property.price)).size).toBeGreaterThan(100);
+    for (const property of entries) {
+      expect(Number.isSafeInteger(property.price)).toBe(true);
+      expect(property.price).toBeGreaterThanOrEqual(70000000);
+      expect(property.price).toBeLessThan(520000000);
+    }
+  }
 });
 
 test("cada comuna pertenece a su región y ciudad, sin barrios como comunas", () => {

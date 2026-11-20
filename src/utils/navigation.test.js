@@ -28,3 +28,9 @@ test("conserva parámetros repetidos y no genera un signo de interrogación vac�
   const empty = buildNavigationDestinations({ pathname: "/search", search: "?view=map" });
   expect(empty.find((entry) => entry.key === "search").to).toBe("/search");
 });
+
+test.each(["/search/", "/SEARCH", "/Search///"])("normaliza %s sin perder criterios", (pathname) => {
+  const entries = buildNavigationDestinations({ pathname, search: "?city=Talca" });
+  expect(entries.find((entry) => entry.key === "search")).toMatchObject({ active: true, to: "/search?city=Talca" });
+  expect(entries.find((entry) => entry.key === "map").to).toBe("/map?city=Talca");
+});

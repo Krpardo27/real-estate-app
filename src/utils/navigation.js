@@ -1,5 +1,6 @@
 /** Lista y mapa comparten criterios, pero nunca el modo de vista del destino anterior. */
 export const buildNavigationDestinations = ({ pathname, search = "" }) => {
+  pathname = (pathname || "/").replace(/\/+$/, "").toLowerCase() || "/";
   const isSearch = pathname === "/search";
   const isMap = pathname === "/map";
   const params = new URLSearchParams(isSearch || isMap ? search : "");

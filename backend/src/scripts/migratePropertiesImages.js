@@ -1,17 +1,11 @@
-import { v2 as cloudinary } from "cloudinary";
-import dotenv from "dotenv";
+import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
-import { properties } from "../data/properties.js";
-
-dotenv.config();
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import * as source from "../data/properties.js";
+import { runMigration } from "./migrationSafety.js";
 
 async function migrate() {
+  const properties = source.properties;
+  if (!Array.isArray(properties) || !properties.length) throw new Error("Falta un catálogo fuente válido.");
   const newProperties = [];
 
   for (const property of properties) {
@@ -26,7 +20,7 @@ async function migrate() {
         folder: `real-estate/properties/${property.id}`,
         public_id: `image-${i}`,
         resource_type: "image",
-        overwrite: true,
+        overwrite: false,
       });
 
       uploadedImages.push(result.public_id);
@@ -40,11 +34,12 @@ async function migrate() {
   }
 
   fs.writeFileSync(
-    "./properties-cloudinary.js",
-    `export const properties = ${JSON.stringify(newProperties, null, 2)}`
+    new URL("../../properties-cloudinary.js", import.meta.url),
+    `export const properties = ${JSON.stringify(newProperties, null, 2)}`,
+    { flag: "wx" }
   );
 
   console.log("Migration finished");
 }
 
-migrate().catch(console.error);
+runMigration(import.meta.url, migrate);

@@ -1,5 +1,5 @@
 import { properties } from "./properties.js";
-import { siteImages } from "./siteImages.js";
+import { siteImages, cityImageSrcSets } from "./siteImages.js";
 
 export const cities = Object.values(
   properties.reduce((acc, property) => {
@@ -12,6 +12,7 @@ export const cities = Object.values(
         isDemo: true,
         properties: 0,
         image: siteImages.cities[city] || property.images?.[0] || "",
+        imageSet: cityImageSrcSets[city],
       };
     }
 

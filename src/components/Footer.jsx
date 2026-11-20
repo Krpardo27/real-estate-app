@@ -13,7 +13,7 @@ const linkClass = "inline-flex min-h-11 items-center rounded-sm py-2 text-sm tex
 
 const Footer = () => (
   <footer className="border-t border-slate-800 bg-slate-900 text-slate-300">
-    <div className="page-container grid grid-cols-2 gap-6 py-10 lg:grid-cols-4 lg:gap-10 lg:py-14">
+    <div className="mx-auto grid w-full max-w-7xl grid-cols-2 gap-6 px-4 py-10 sm:px-6 lg:grid-cols-4 lg:gap-10 lg:py-14">
       <div className="col-span-2 sm:col-span-1">
         <Link to="/" className="inline-flex min-h-11 items-center gap-2 rounded-sm text-xl font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">
           <FiHome aria-hidden="true" />
@@ -48,8 +48,8 @@ const Footer = () => (
         <nav aria-labelledby="footer-explore-title">
           <h2 id="footer-explore-title" className="mb-2 text-sm font-semibold text-white">Explorar</h2>
           <ul>
-            <li><Link to="/search" className={linkClass}>Todas las propiedades</Link></li>
-            <li><Link to="/map" className={linkClass}>Ver mapa</Link></li>
+            <li><Link to="/search?filters=all" className={linkClass}>Todas las propiedades</Link></li>
+            <li><Link to="/map?filters=all" className={linkClass}>Ver mapa</Link></li>
             <li><Link to="/favorites" className={linkClass}>Mis guardados</Link></li>
           </ul>
         </nav>
@@ -63,7 +63,7 @@ const Footer = () => (
       </div>
     </div>
     <div className="border-t border-slate-700">
-      <div className="page-container flex flex-col gap-2 py-6 text-xs leading-5 text-slate-300 sm:flex-row sm:justify-between">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-2 px-4 py-6 text-xs leading-5 text-slate-300 sm:flex-row sm:justify-between sm:px-6">
         <p>© {new Date().getFullYear()} HomeEstate</p>
         <p>Proyecto de demostración · Imágenes ilustrativas</p>
       </div>

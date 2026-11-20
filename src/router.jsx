@@ -25,33 +25,36 @@ const router = createBrowserRouter([
     ),
     errorElement: <NotFound />,
     children: [
-      { path: "favorites", lazy: async () => ({ Component: (await import("./pages/Favorites.jsx")).default }) },
-      { path: "*", element: <NotFound /> },
       {
-        index: true,
-        element: <Home />,
-      },
-
-      {
-        path: "property/:id",
-        lazy: async () => ({ Component: (await import("./pages/PropertyDetail.jsx")).default }),
-        handle: {
-          breadcrumb: (match) =>
-            match.data?.title || `Propiedad ${match.params.id}`,
-        },
-      },
-      {
-        path: "/map",
-        loader: propertySearchLoader,
-        lazy: async () => ({ Component: (await import("./pages/MapView.jsx")).default }),
-      },
-      {
-        path: "search",
-        loader: propertySearchLoader,
-        lazy: async () => ({ Component: (await import("./pages/SearchResults.jsx")).default }),
-        handle: {
-          breadcrumb: () => "Resultados",
-        },
+        // Los errores de render, loader o importación se muestran en el Outlet,
+        // sin desmontar la navegación, el main ni la restauración del scroll.
+        errorElement: <NotFound />,
+        children: [
+          { path: "favorites", lazy: async () => ({ Component: (await import("./pages/Favorites.jsx")).default }) },
+          { path: "*", element: <NotFound /> },
+          { index: true, element: <Home /> },
+          {
+            path: "property/:id",
+            lazy: async () => ({ Component: (await import("./pages/PropertyDetail.jsx")).default }),
+            handle: {
+              breadcrumb: (match) =>
+                match.data?.title || `Propiedad ${match.params.id}`,
+            },
+          },
+          {
+            path: "map",
+            loader: propertySearchLoader,
+            lazy: async () => ({ Component: (await import("./pages/MapView.jsx")).default }),
+          },
+          {
+            path: "search",
+            loader: propertySearchLoader,
+            lazy: async () => ({ Component: (await import("./pages/SearchResults.jsx")).default }),
+            handle: {
+              breadcrumb: () => "Resultados",
+            },
+          },
+        ],
       },
     ],
   },

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { siteImages } from "../data/siteImages.js";
 import { resolveImage } from "../utils/images.js";
 
-export default function Seo({ title, description, noindex = false, image }) {
+export default function Seo({ title, description, noindex = true, image }) {
   const { pathname } = useLocation();
   const configuredOrigin = import.meta.env.VITE_SITE_URL;
   let origin;

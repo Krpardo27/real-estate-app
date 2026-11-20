@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Photo from "./PropertyImage.jsx";
+import { FiMaximize2, FiImage } from "react-icons/fi";
 
 export default function PropertyGallery({ images, title, isDemo = true }) {
   const sources = [...new Set((Array.isArray(images) ? images : [])
@@ -41,11 +42,11 @@ export default function PropertyGallery({ images, title, isDemo = true }) {
     }
   };
 
-  const imageClassName = `w-full rounded-lg object-cover ${sources.length <= 1 ? "aspect-4/3 max-h-130 sm:aspect-video" : "aspect-4/3"}`;
+  const imageClassName = `w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-[1.015] ${sources.length <= 1 ? "aspect-4/3 sm:aspect-[2.2/1] sm:max-h-130" : "aspect-4/3"}`;
 
   return (
-    <section aria-label={isDemo ? "Imágenes ilustrativas de la propiedad" : "Fotografías de la propiedad"} className="mb-8">
-      <div className={`grid gap-3 ${sources.length > 1 ? "sm:grid-cols-2" : "grid-cols-1"}`}>
+    <section aria-label={isDemo ? "Imágenes ilustrativas de la propiedad" : "Fotografías de la propiedad"} className="mb-9 sm:mb-12">
+      <div className={`grid gap-2 ${sources.length > 1 ? "sm:grid-cols-2" : "grid-cols-1"}`}>
         {sources.length ? sources.map((src, index) => (
           <button
             key={src}
@@ -53,7 +54,7 @@ export default function PropertyGallery({ images, title, isDemo = true }) {
             aria-label={`Ampliar fotografía ${index + 1} de ${sources.length}`}
             aria-haspopup="dialog"
             onClick={(event) => open(index, event.currentTarget)}
-            className="block min-w-0 cursor-zoom-in rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-slate-900"
+            className="group relative block min-w-0 cursor-zoom-in overflow-hidden bg-stone-200 text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-700"
           >
             <Photo
               src={src}
@@ -64,12 +65,18 @@ export default function PropertyGallery({ images, title, isDemo = true }) {
               fetchPriority={index === 0 ? "high" : "auto"}
               className={imageClassName}
             />
+            <span aria-hidden="true" className="absolute right-3 bottom-3 flex min-h-10 items-center gap-2 bg-white px-3 py-2 text-[11px] font-semibold text-slate-800 transition-colors group-hover:bg-indigo-50 group-hover:text-indigo-800 sm:right-5 sm:bottom-5 sm:px-4">
+              <FiMaximize2 size={15} />{sources.length === 1 ? "Ampliar fotografía" : `Ampliar fotografía ${index + 1} de ${sources.length}`}
+            </span>
           </button>
         )) : (
           <Photo width={1280} sizes="(max-width: 1279px) 100vw, 1280px" alt="Imagen no disponible" className={imageClassName} />
         )}
       </div>
-      {isDemo && <p className="mt-2 text-xs text-slate-500">Imágenes ilustrativas del catálogo de demostración.</p>}
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-[10px] leading-5 text-slate-500 sm:text-[11px]">
+        {isDemo && <p>Imágenes ilustrativas del catálogo de demostración.</p>}
+        <p className="flex items-center gap-1.5"><FiImage size={13} aria-hidden="true" />{sources.length} {sources.length === 1 ? "imagen disponible" : "imágenes disponibles"}</p>
+      </div>
       {activeIndex !== null && !Viewer && (
         <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-slate-700">
           {loadError
