@@ -9,15 +9,15 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 h-20 w-full border-b border-slate-200 bg-white">
-      <div className="page-container flex h-full items-center justify-between gap-3 lg:gap-6">
+      <div className="mx-auto flex h-full w-full max-w-7xl items-center justify-between gap-3 px-4 sm:px-6 lg:gap-6">
         <Link
           to="/"
-          aria-label="HomeEstate, inicio"
+          aria-label="HomeEstate, propiedades en Chile, inicio"
           className="flex min-h-11 shrink-0 items-center gap-2.5 rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-600"
         >
           <span className="flex size-9 items-center justify-center rounded-lg bg-indigo-700 text-white"><FiHome size={21} aria-hidden="true" /></span>
           <span>
-            <span className="block text-lg font-bold tracking-tight text-slate-900 lg:text-xl">HomeEstate</span>
+            <span className="block text-lg font-bold tracking-tight text-slate-900 lg:text-xl">HomeEstate</span>{" "}
             <span className="mt-0.5 hidden text-[10px] font-medium tracking-wide text-slate-500 lg:block">Propiedades en Chile</span>
           </span>
         </Link>
@@ -29,11 +29,11 @@ const Header = () => {
               to={to}
               aria-label={accessibleLabel}
               aria-current={active ? "page" : undefined}
-              className={`flex min-h-11 h-full items-center gap-2 border-b-2 px-2 text-sm font-semibold transition-colors focus-visible:rounded-sm focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-indigo-600 lg:px-3 ${active ? "border-indigo-700 text-indigo-700" : "border-transparent text-slate-600 hover:border-slate-200 hover:text-slate-950"}`}
+              className={`group flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 lg:px-3 ${active ? "text-indigo-700 hover:bg-indigo-50 hover:text-indigo-900" : "text-slate-600 hover:bg-indigo-50 hover:text-indigo-800"}`}
             >
               <Icon size={18} aria-hidden="true" className="hidden lg:block" />
-              {label}
-              {count > 0 && <span aria-hidden="true" className="inline-flex min-h-5 min-w-5 items-center justify-center rounded-md bg-slate-100 px-1 text-[10px] tabular-nums text-slate-700">{count > 99 ? "99+" : count}</span>}
+              <span className={`relative after:absolute after:inset-x-0 after:-bottom-1.5 after:h-0.5 after:rounded-full after:transition-colors ${active ? "after:bg-indigo-700 group-hover:after:bg-indigo-900" : "after:bg-transparent group-hover:after:bg-indigo-400"}`}>{label}</span>
+              {" "}{count > 0 && <span aria-hidden="true" className="inline-flex h-6 min-w-6 shrink-0 items-center justify-center rounded-full bg-indigo-700 px-1.5 text-xs font-bold leading-none tabular-nums text-white group-hover:bg-indigo-900">{count > 99 ? "99+" : count}</span>}
             </Link>
           ))}
         </nav>

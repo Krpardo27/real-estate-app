@@ -14,7 +14,7 @@ const Loading = ({ pathname = "" }) => {
   const hasFilters = page === "search" || page === "map";
 
   return (
-    <section role="status" aria-label="Cargando página" aria-live="polite" aria-atomic="true" className="page-container py-8 sm:py-12">
+    <section role="status" aria-label="Cargando página" aria-live="polite" aria-atomic="true" className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-12">
       <div className="max-w-lg">
         <div className="mb-5 flex items-center gap-3">
           <span aria-hidden="true" className="flex size-10 items-center justify-center rounded-lg border border-indigo-100 bg-indigo-50 text-indigo-700"><FiHome size={21} /></span>

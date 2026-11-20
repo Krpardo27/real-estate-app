@@ -19,7 +19,7 @@ test("no muestra progreso cuando no existe navegación", () => {
 test.each(["loading", "submitting"])("anuncia una navegación %s hacia otro pathname", (state) => {
   router.navigation = { state, location: { pathname: "/search" } };
   const html = render();
-  expect(html).toContain('class="navigation-loading"');
+  expect(html).toMatch(/class="(?:[^"]*\s)?navigation-loading(?:\s[^"]*)?"/);
   expect(html).toContain('aria-live="polite"');
   expect(html).toContain("Buscando propiedades");
   expect(html).toContain('aria-hidden="true"');
@@ -46,7 +46,7 @@ test("soporta navegaciones consecutivas sin estado ni indicadores duplicados", (
   for (const pathname of ["/favorites", "/search", "/property/1"]) {
     router.navigation = { state: "loading", location: { pathname } };
     const html = render();
-    expect(html).toContain('class="navigation-loading"');
+    expect(html).toMatch(/class="(?:[^"]*\s)?navigation-loading(?:\s[^"]*)?"/);
     expect(html.match(/role="status"/g)).toHaveLength(1);
     router.navigation = { state: "idle" };
     expect(render()).toBe("");

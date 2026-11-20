@@ -8,10 +8,12 @@ export default function PropertyImage({ src, width = 800, quality = 75, alt, ...
     const host = new URL(resolved).hostname;
     responsive = host === "images.unsplash.com";
   } catch { /* El resolvedor ya devuelve un fallback seguro. */ }
+  const widths = width < 400 ? [...new Set([width, Math.min(400, width * 2)])] : [400, 800, 1440];
   return <img
     {...props}
+    width={width}
     src={resolved}
-    srcSet={responsive ? [400, 800, 1440].map((size) => `${resolveImage(src, size, quality)} ${size}w`).join(", ") : undefined}
+    srcSet={responsive ? widths.map((size) => `${resolveImage(src, size, quality)} ${size}w`).join(", ") : props.srcSet}
     sizes={props.sizes || "(max-width: 639px) 100vw, (max-width: 1023px) 50vw, 400px"}
     alt={alt}
     decoding="async"

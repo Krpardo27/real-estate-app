@@ -59,13 +59,9 @@ describe("seoAssets: origen público", () => {
 });
 
 describe("seoAssets: HTML e imágenes", () => {
-  it("precarga exactamente el hero responsive y comparte imagen social con la aplicación", () => {
+  it("no precarga el hero en el HTML compartido por rutas y conserva la imagen social", () => {
     const { tags, html: transformed } = seoAssets().transformIndexHtml.handler(html);
-    const preload = tags.find(({ attrs }) => attrs.rel === "preload").attrs;
-    expect(preload.href).toBe(resolveImage(siteImages.hero, 1440, 60));
-    expect(preload.imagesrcset).toBe([400, 800, 1440].map((width) => `${resolveImage(siteImages.hero, width, 60)} ${width}w`).join(", "));
-    expect(preload.imagesizes).toBe("100vw");
-    expect(preload.fetchpriority).toBe("high");
+    expect(tags.some(({ attrs }) => attrs.rel === "preload")).toBe(false);
     expect(tags).toContainEqual(expect.objectContaining({ attrs: { property: "og:image", content: resolveImage(siteImages.social, 1200) } }));
     expect(transformed).toContain("Catálogo demo de propiedades en Chile | HomeEstate");
     expect(transformed).toContain('src="/src/main.jsx"');
@@ -85,7 +81,7 @@ describe("seoAssets: HTML e imágenes", () => {
       siteImages.hero = "/images/hero.webp";
       siteImages.social = "/images/social.webp";
       const withoutOrigin = seoAssets().transformIndexHtml.handler(html).tags;
-      expect(withoutOrigin.find(({ attrs }) => attrs.rel === "preload").attrs).not.toHaveProperty("imagesrcset");
+      expect(withoutOrigin.some(({ attrs }) => attrs.rel === "preload")).toBe(false);
       expect(withoutOrigin.some(({ attrs }) => attrs.property === "og:image")).toBe(false);
       const withOrigin = seoAssets("https://example.com").transformIndexHtml.handler(html).tags;
       expect(withOrigin).toContainEqual(expect.objectContaining({ attrs: { property: "og:image", content: "https://example.com/images/social.webp" } }));
@@ -162,12 +158,12 @@ it("rechaza dominios malformados, inseguros o con credenciales", () => {
   for (const value of ["https://Home Estate.cl", "http://example.com", "https://user:pass@example.com", "https://example.com/path", "https://example.com?x=1"]) expect(() => seoAssets(value)).toThrow();
 });
 
-it("precarga e imagen social siguen los archivos públicos configurados", () => {
+it("imagen social local y ausencia de precargas ajenas a la ruta", () => {
   const previous = { hero: siteImages.hero, social: siteImages.social };
   try {
     Object.assign(siteImages, { hero: "/images/hero/casa.webp", social: "/images/social.webp" });
     const { tags } = seoAssets("https://example.com").transformIndexHtml.handler("</head>");
-    expect(tags).toContainEqual(expect.objectContaining({ attrs: expect.objectContaining({ rel: "preload", href: "/images/hero/casa.webp" }) }));
+    expect(tags.some(({ attrs }) => attrs.rel === "preload")).toBe(false);
     expect(tags).toContainEqual(expect.objectContaining({ attrs: { property: "og:image", content: "https://example.com/images/social.webp" } }));
     expect(JSON.stringify(tags)).not.toMatch(/unsplash|cloudinary|imagesrcset/);
     expect(JSON.stringify(seoAssets().transformIndexHtml.handler("</head>"))).not.toMatch(/og:image/);

@@ -1,16 +1,7 @@
-import { v2 as cloudinary } from "cloudinary";
-import dotenv from "dotenv";
+import cloudinary from "../config/cloudinary.js";
 import fs from "fs";
 import { cities } from "../data/cities.js";
-
-
-dotenv.config();
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import { runMigration } from "./migrationSafety.js";
 
 const slug = (str) =>
   str
@@ -30,7 +21,7 @@ async function migrateCities() {
         folder: "real-estate/cities",
         public_id: slug(city.name),
         resource_type: "image",
-        overwrite: true,
+        overwrite: false,
       });
 
       console.log("uploaded:", result.public_id);
@@ -39,21 +30,16 @@ async function migrateCities() {
         ...city,
         image: result.public_id, // guardamos solo public_id
       });
-    } catch (err) {
-      console.error(`Error uploading ${city.name}:`, err?.message || err);
-      // Si falla, dejamos la URL original para no perder la data
-      newCities.push(city);
+    } catch {
+      throw new Error("No se pudo migrar una ciudad; se aborta el catálogo.");
     }
   }
 
   const fileContent =
     `export const cities = ` + JSON.stringify(newCities, null, 2) + `;\n`;
 
-  fs.writeFileSync("./cities-cloudinary.js", fileContent);
+  fs.writeFileSync(new URL("../../cities-cloudinary.js", import.meta.url), fileContent, { flag: "wx" });
   console.log("Cities migration finished");
 }
 
-migrateCities().catch((e) => {
-  console.error("Fatal error:", e);
-  process.exit(1);
-});
+runMigration(import.meta.url, migrateCities);

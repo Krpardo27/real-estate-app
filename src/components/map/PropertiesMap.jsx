@@ -26,6 +26,7 @@ const formatPrice = (price) => Number.isFinite(price) && price >= 0
 function PropertyMapPopup({ group, onClose, onFit }) {
   const headingId = useId();
   const closeRef = useRef(null);
+  const listRef = useRef(null);
   const coordinateKey = getLocationCoordinateKey(group.properties);
   const canFit = JSON.parse(coordinateKey).length > 1;
   const names = [...new Set(group.properties.map((property) =>
@@ -33,6 +34,16 @@ function PropertyMapPopup({ group, onClose, onFit }) {
   const cities = [...new Set(group.properties.map(({ city }) => city).filter(Boolean))];
   const heading = names.length === 1 ? names[0] : cities.length === 1 ? cities[0] : "Propiedades en esta zona";
   const count = group.properties.length;
+  const [page, setPage] = useState(0);
+  const pageSize = 6;
+  const visible = group.properties.slice(page * pageSize, (page + 1) * pageSize);
+  const changePage = (nextPage) => {
+    setPage(nextPage);
+    if (listRef.current) {
+      listRef.current.scrollTop = 0;
+      listRef.current.focus({ preventScroll: true });
+    }
+  };
 
   useEffect(() => {
     closeRef.current?.focus({ preventScroll: true });
@@ -52,8 +63,8 @@ function PropertyMapPopup({ group, onClose, onFit }) {
           <FiMaximize aria-hidden="true" />Acercar a esta zona
         </button>
       )}
-      <ul tabIndex={0} aria-label="Fichas en esta ubicación aproximada" className="property-map__popup-list">
-        {group.properties.map((property) => (
+      <ul ref={listRef} tabIndex={0} aria-label="Fichas en esta ubicación aproximada" className="property-map__popup-list">
+        {visible.map((property) => (
           <li key={property.id}>
             <Link to={`/property/${encodeURIComponent(property.id)}`} className="property-map__property">
               <PropertyImage
@@ -75,6 +86,11 @@ function PropertyMapPopup({ group, onClose, onFit }) {
           </li>
         ))}
       </ul>
+      {count > pageSize && <div className="flex items-center justify-between gap-2 border-t border-slate-200 px-3 py-2 text-xs">
+        <button type="button" className="min-h-11 px-2 font-medium text-indigo-800 disabled:text-slate-400" disabled={page === 0} onClick={() => changePage(page - 1)}>Anterior</button>
+        <span role="status" aria-live="polite">{page * pageSize + 1}–{Math.min((page + 1) * pageSize, count)} de {count}</span>
+        <button type="button" className="min-h-11 px-2 font-medium text-indigo-800 disabled:text-slate-400" disabled={(page + 1) * pageSize >= count} onClick={() => changePage(page + 1)}>Siguiente</button>
+      </div>}
     </div>
   );
 }
@@ -88,7 +104,7 @@ export default function PropertiesMap({ properties }) {
   const [resourceError, setResourceError] = useState(false);
   const [unavailable, setUnavailable] = useState(false);
   const [selection, setSelection] = useState(null);
-  const [zoom, setZoom] = useState(Math.floor(INITIAL_VIEW_STATE.zoom));
+  const [zoom, setZoom] = useState(INITIAL_VIEW_STATE.zoom);
   const [styleId, setStyleId] = useState(MAP_STYLES[0].id);
   const [locating, setLocating] = useState(false);
   const [fullscreen, setFullscreen] = useState(false);
@@ -121,7 +137,7 @@ export default function PropertiesMap({ properties }) {
 
   const syncZoom = (event) => {
     // Leer la cámara final, también tras el fit animado de 450 ms y los resize.
-    setZoom(Math.floor(event.target.getZoom()));
+    setZoom(event.target.getZoom());
   };
 
   const closePopup = useCallback(() => {
@@ -130,6 +146,14 @@ export default function PropertiesMap({ properties }) {
       markerButtonRef.current.focus({ preventScroll: true });
     }
   }, []);
+  const closePopupOnCameraChange = () => {
+    const focusWasInPopup = rootRef.current?.querySelector(".property-map__popup")?.contains(document.activeElement);
+    setSelection(null);
+    if (focusWasInPopup) {
+      // El marcador puede desaparecer al cambiar el clustering.
+      rootRef.current?.focus({ preventScroll: true });
+    }
+  };
 
   useEffect(() => {
     mountedRef.current = true;
@@ -221,6 +245,7 @@ export default function PropertiesMap({ properties }) {
     <div
       ref={rootRef}
       role="region"
+      tabIndex={-1}
       aria-label="Mapa de propiedades"
       aria-describedby={instructionsId}
       data-testid="properties-map"
@@ -290,9 +315,9 @@ export default function PropertiesMap({ properties }) {
               setLoaded(true);
             }}
             onMoveEnd={syncZoom}
-            onZoomStart={() => setSelection(null)}
+            onZoomStart={closePopupOnCameraChange}
             onZoomEnd={syncZoom}
-            onResize={(event) => { syncZoom(event); setSelection(null); }}
+            onResize={(event) => { syncZoom(event); closePopupOnCameraChange(); }}
             onError={(event) => {
               // Un único aviso persistente, sin mensajes internos ni spam por tesela.
               if (!event.target || /webgl|context lost|gpu/i.test(event.error?.message || "")) {

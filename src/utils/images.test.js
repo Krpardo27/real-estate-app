@@ -1,6 +1,25 @@
 import { test, expect } from "vitest";
+import { readFileSync } from "node:fs";
 import { resolveImage, FALLBACK_IMAGE } from "./images.js";
-import { propertyImages } from "../data/siteImages.js";
+import { propertyImages, siteImages, cityImageCredits, cityImageSrcSets } from "../data/siteImages.js";
+
+test("cada ciudad tiene fotografía WebP local, variantes y créditos con licencia", () => {
+  for (const [city, path] of Object.entries(siteImages.cities)) {
+    expect(resolveImage(path)).toBe(path);
+    const image = readFileSync(new URL(`../../public${path}`, import.meta.url));
+    expect(image.toString("ascii", 0, 4)).toBe("RIFF");
+    expect(image.toString("ascii", 8, 12)).toBe("WEBP");
+    for (const candidate of cityImageSrcSets[city].split(", ")) {
+      const [variant, size] = candidate.split(" ");
+      expect(readFileSync(new URL(`../../public${variant}`, import.meta.url)).byteLength).toBeGreaterThan(0);
+      expect(size).toMatch(/^\d+w$/);
+    }
+    const credit = cityImageCredits.find((entry) => entry.city === city);
+    expect(credit.author).toBeTruthy();
+    expect(credit.license).toBeTruthy();
+    expect(credit.source).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
+  }
+});
 
 test("admite fotos locales públicas sin configuración ni proveedor", () => {
   expect(resolveImage("/images/hero/casa.webp")).toBe("/images/hero/casa.webp");

@@ -8,7 +8,17 @@ export const FILTER_KEYS = Object.freeze([
   "region", "city", "district", "type", "price", "bedrooms", "bathrooms", "area",
 ]);
 
-export const DEFAULT_PROPERTY_FILTERS = Object.freeze({ region: "13", type: "apartment", price: "350000000" });
+// Selección ilustrativa completa, compatible con el catálogo demo.
+export const DEFAULT_PROPERTY_FILTERS = Object.freeze({
+  region: "13",
+  city: "Santiago",
+  district: "Peñalolén",
+  type: "apartment",
+  price: "350000000",
+  bedrooms: "2",
+  bathrooms: "1",
+  area: "40",
+});
 export const DEFAULT_SEARCH_QUERY = new URLSearchParams(DEFAULT_PROPERTY_FILTERS).toString();
 export const PROPERTY_PRICE_LIMITS = Object.freeze([80000000, 120000000, 200000000, 350000000, 520000000]);
 
@@ -110,6 +120,10 @@ export const updatePropertyFilter = (searchParams, key, value) => {
   params.delete("page");
   if (value !== "" && value !== null && value !== undefined) params.set(key, String(value));
   else params.delete(key);
+  // Retirar solo dependencias de una elección de UI; las URLs explícitas
+  // siguen siendo estrictas y no se reescriben al interpretarlas.
+  if (key === "type" && ["land", "office"].includes(value)) params.delete("bedrooms");
+  if (key === "type" && value === "land") params.delete("bathrooms");
   if (key === "region") {
     params.delete("district");
     const region = parsePropertyFilters(params).region;

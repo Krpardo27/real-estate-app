@@ -5,8 +5,8 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist', 'playwright-report', 'test-results', 'reports']),
-  { files: ['vite.config.js', 'playwright.config.js', 'build/**/*.js', 'scripts/**/*.mjs', 'tests/**/*.js'], languageOptions: { globals: globals.node } },
+  globalIgnores(['**/dist/**', '**/playwright-report/**', '**/test-results/**', '**/reports/**']),
+  { files: ['vite.config.js', 'playwright.config.js', 'build/**/*.js', 'scripts/**/*.mjs', 'tests/**/*.js', 'backend/**/*.js'], languageOptions: { globals: globals.node } },
   {
     files: ['**/*.{js,jsx}'],
     extends: [

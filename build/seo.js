@@ -54,17 +54,10 @@ export function seoAssets(siteUrl) {
     transformIndexHtml: {
       order: "pre",
       handler(html) {
-        const hero = resolveImage(siteImages.hero, 1440, 60);
         const social = resolveImage(siteImages.social, 1200);
         const socialUrl = social.startsWith("https://") ? social : origin ? new URL(social, origin).href : undefined;
-        const preload = { rel: "preload", as: "image", href: hero, fetchpriority: "high", "data-homeestate-hero": "true" };
-        if (new URL(hero, "https://local.invalid").hostname === "images.unsplash.com") {
-          preload.imagesrcset = [400, 800, 1440].map((width) => `${resolveImage(siteImages.hero, width, 60)} ${width}w`).join(", ");
-          preload.imagesizes = "100vw";
-        }
         const tags = [
           { tag: "meta", attrs: { name: "robots", content: "noindex, follow" }, injectTo: "head" },
-          { tag: "link", attrs: preload, injectTo: "head" },
         ];
         if (home) tags.push(
           { tag: "link", attrs: { rel: "canonical", href: home }, injectTo: "head" },

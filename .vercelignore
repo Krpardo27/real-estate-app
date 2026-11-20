@@ -1,0 +1,8 @@
+.env
+.env.*
+backend/
+frontend/
+tests/
+reports/
+playwright-report/
+test-results/

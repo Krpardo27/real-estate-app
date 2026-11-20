@@ -1,4 +1,5 @@
 import { test, expect } from "vitest";
+import { properties } from "../data/properties.js";
 import {
   FILTER_KEYS, DEFAULT_PROPERTY_FILTERS, DEFAULT_SEARCH_QUERY,
   initializePropertySearch, clearPropertyFilters, applyDefaultPropertyFilters,
@@ -14,8 +15,25 @@ const catalogue = [
 const params = (query = "") => new URLSearchParams(query);
 const ids = (query) => filterProperties(catalogue, params(query)).map((property) => property.id);
 
-test("inicializa región, tipo y precio sin perder parámetros de navegación ni mutar la URL", () => {
-  expect(DEFAULT_PROPERTY_FILTERS).toStrictEqual({ region: "13", type: "apartment", price: "350000000" });
+test("elegir terreno u oficina elimina solo características incompatibles", () => {
+  const initial = params("city=Santiago&type=apartment&bedrooms=2&bathrooms=1&price=350000000&area=40&sort=price-asc&page=3");
+  const land = updatePropertyFilter(initial, "type", "land");
+  expect(land.has("bedrooms")).toBe(false);
+  expect(land.has("bathrooms")).toBe(false);
+  const office = updatePropertyFilter(initial, "type", "office");
+  expect(office.has("bedrooms")).toBe(false);
+  expect(office.get("bathrooms")).toBe("1");
+  for (const key of ["city", "price", "area", "sort"]) expect(land.get(key)).toBe(initial.get(key));
+  expect(initial.get("bedrooms")).toBe("2");
+  // La URL explícita no se corrige silenciosamente ni se altera el filtro estricto.
+  expect(parsePropertyFilters(params("type=land&bedrooms=2"))).toEqual({ type: "land", bedrooms: 2 });
+});
+
+test("inicializa todos los filtros sin perder parámetros de navegación ni mutar la URL", () => {
+  expect(DEFAULT_PROPERTY_FILTERS).toStrictEqual({
+    region: "13", city: "Santiago", district: "Peñalolén", type: "apartment",
+    price: "350000000", bedrooms: "2", bathrooms: "1", area: "40",
+  });
   expect(DEFAULT_SEARCH_QUERY).toBe(new URLSearchParams(DEFAULT_PROPERTY_FILTERS).toString());
   expect(initializePropertySearch(params()).toString()).toBe(DEFAULT_SEARCH_QUERY);
   const original = params("utm_source=demo&sort=price-asc&view=map");
@@ -26,7 +44,9 @@ test("inicializa región, tipo y precio sin perder parámetros de navegación ni
   for (const key of ["utm_source", "sort", "view"]) expect(initialized.get(key)).toBe(original.get(key));
   expect(original.toString()).toBe("utm_source=demo&sort=price-asc&view=map");
   expect(initializePropertySearch(initialized).toString()).toBe(initialized.toString());
-  expect(filterProperties(catalogue, initialized).map((entry) => entry.id)).toStrictEqual([1, 4]);
+  const parsed = parsePropertyFilters(initialized);
+  expect(FILTER_KEYS.every((key) => parsed[key] !== undefined)).toBe(true);
+  expect(filterProperties(properties, initialized).length).toBeGreaterThan(0);
 });
 
 test("no añade defaults a ningún criterio explícito, vacío o inválido, ni a filters=all", () => {
@@ -58,8 +78,11 @@ test("limpiar elimina filtros y página, mantiene navegación y evita resucitar 
 test("restablecer aplica solo el preset y conserva sort, view y campañas", () => {
   const original = params("filters=all&city=Talca&district=Talca&type=land&price=123&bedrooms=4&bathrooms=2&area=300&page=9&sort=price-asc&view=list&utm_campaign=demo");
   const restored = applyDefaultPropertyFilters(original);
-  expect(parsePropertyFilters(restored)).toStrictEqual({ region: "13", type: "apartment", price: 350000000, sort: "price-asc" });
-  for (const key of ["city", "district", "bedrooms", "bathrooms", "area", "page", "filters"]) {
+  expect(parsePropertyFilters(restored)).toStrictEqual({
+    region: "13", city: "Santiago", district: "Peñalolén", type: "apartment",
+    price: 350000000, bedrooms: 2, bathrooms: 1, area: 40, sort: "price-asc",
+  });
+  for (const key of ["page", "filters"]) {
     expect(restored.has(key)).toBe(false);
   }
   for (const key of ["sort", "view", "utm_campaign"]) expect(restored.get(key)).toBe(original.get(key));

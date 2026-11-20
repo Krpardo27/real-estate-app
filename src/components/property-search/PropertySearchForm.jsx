@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { motion as Motion, useReducedMotion } from "framer-motion";
 import { FormProvider, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
@@ -23,6 +24,12 @@ const formOptions = {
 
 const PropertySearchForm = () => {
   const id = useId();
+  const reducedMotion = useReducedMotion();
+  const headingMotion = {
+    initial: reducedMotion ? false : { opacity: 0.8, y: 6 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: reducedMotion ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] },
+  };
   const navigate = useNavigate();
   const methods = useForm(formOptions);
   const { isSubmitting } = methods.formState;
@@ -41,28 +48,28 @@ const PropertySearchForm = () => {
         role="search"
         aria-label="Buscar propiedades"
         aria-describedby={`${id}-hint`}
-        className="mt-8 max-w-6xl rounded-lg border border-slate-200 bg-white p-5 text-slate-900 sm:p-6"
+        className="relative mt-6 border border-stone-200 bg-white p-4 text-slate-900 sm:p-6 lg:z-10 lg:-mt-14 lg:p-7"
       >
-        <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-slate-200 pb-4">
-          <h2 className="text-base font-semibold tracking-tight">Define tu búsqueda</h2>
-          <p id={`${id}-hint`} className="text-xs leading-5 text-slate-600">Todos los filtros son opcionales.</p>
+        <div className="mb-5 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <Motion.h2 {...headingMotion} className="text-base font-semibold tracking-tight">¿Qué propiedad buscas?</Motion.h2>
+          <Motion.p {...headingMotion} id={`${id}-hint`} className="text-xs leading-5 text-slate-600">Todos los filtros son opcionales.</Motion.p>
         </div>
 
-        <div className="grid min-w-0 items-start gap-x-5 gap-y-5 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.15fr)]">
+        <div className="grid min-w-0 items-start gap-x-5 gap-y-4 sm:grid-cols-2 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1.15fr)]">
           <RegionSelect />
           <DistrictSelect />
           <PropertyTypeSelect />
           <PriceSelect />
         </div>
 
-        <div className="mt-5 flex flex-col gap-4 border-t border-slate-200 pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between lg:flex-nowrap">
+        <div className="mt-5 flex flex-col gap-3 border-t border-stone-200 pt-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between lg:flex-nowrap">
           <p className="max-w-sm text-xs leading-5 text-slate-600 sm:max-w-60 lg:max-w-sm">Algunas comunas no tienen propiedades de demostración.</p>
           <div className="flex flex-col gap-2 sm:ml-auto sm:shrink-0 sm:flex-row sm:items-center sm:gap-3">
             <button
               type="submit"
               disabled={isSubmitting}
               aria-busy={isSubmitting}
-              className="button-primary min-h-12 w-full px-7 active:bg-indigo-800 disabled:cursor-wait disabled:opacity-70 sm:w-auto"
+              className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-sm bg-indigo-700 px-8 text-sm font-semibold text-white transition-colors hover:bg-indigo-800 active:bg-indigo-900 disabled:cursor-wait disabled:opacity-70 sm:w-auto"
             >
               <FiSearch size={18} aria-hidden="true" />
               Buscar
